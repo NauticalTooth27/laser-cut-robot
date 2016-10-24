@@ -34,7 +34,8 @@ class Feet implements ICadGenerator, IParameterChanged{
 	private TransformNR offset =BowlerStudio3dEngine.getOffsetforvisualization().inverse();
 	ArrayList<CSG> headParts =null
 	@Override 
-	public ArrayList<CSG> generateCad(DHParameterKinematics d, int linkIndex) {
+	public ArrayList<CSG> generateCad(DHParameterKinematics d, int linkIndex) 
+	{
 		ArrayList<CSG> allCad=defaultCadGen.generateCad(d,linkIndex);
 		ArrayList<DHLink> dhLinks=d.getChain().getLinks();
 		DHLink dh = dhLinks.get(linkIndex)
@@ -42,7 +43,7 @@ class Feet implements ICadGenerator, IParameterChanged{
 		//allCad.add(myCSG);
 		if(linkIndex ==dhLinks.size()-1){
 			println "Found foot limb" 
-			CSG foot =new Cylinder(10,10,thickness.getMM(),(int)30).toCSG() // a one line Cylinder
+			CSG foot =new Sphere(20).toCSG() // a one line Cylinder
 			
 			defaultCadGen.add(allCad,foot,dh.getListener())
 		}
