@@ -44,9 +44,9 @@ class Feet implements ICadGenerator, IParameterChanged{
 
 		CSG servoReference=   Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
 		.transformed(new Transform().rotZ(90))
-\
+
 		double servoTop = servoReference.getMaxZ()
-		CSG horn = Vitamins.get(conf.getShaftTpe(),conf.getShaftSize()).hull()
+		CSG horn = Vitamins.get(conf.getShaftType(),conf.getShaftSize()).hull()
 		
 		HashMap<String, Object> shaftmap = Vitamins.getConfiguration(conf.getShaftType(),conf.getShaftSize())
 		double hornOffset = 	shaftmap.get("hornThickness")	
