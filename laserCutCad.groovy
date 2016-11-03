@@ -155,8 +155,9 @@ return new ICadGenerator(){
 			
 		}
 
-		CSG testPiece = new Cube(20,40,20).toCSG()
-		add(csg,moveDHValues(testPiece,dh).movex(50),dh.getListener())
+		//Pieces for limbs
+		//CSG testPiece = new Cube(40,80,40).toCSG()
+		//add(csg,moveDHValues(testPiece,dh),dh.getListener())
 		add(csg,moveDHValues(horn,dh),dh.getListener())
 
 		if(neck ==sourceLimb ){
