@@ -44,6 +44,9 @@ class Feet implements ICadGenerator, IParameterChanged{
 
 		CSG servoReference=   Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
 		.transformed(new Transform().rotZ(90))
+\
+		double servoTop = servoReference.getMaxZ()
+		CSG horn = Vitamins.get(conf.getShaftTpe(),conf.getShaftSize()).hull()
 		
 		HashMap<String, Object> shaftmap = Vitamins.getConfiguration(conf.getShaftType(),conf.getShaftSize())
 		double hornOffset = 	shaftmap.get("hornThickness")	
@@ -55,8 +58,13 @@ class Feet implements ICadGenerator, IParameterChanged{
 			CSG foot =new Sphere(20).toCSG() // a one line Cylinder
 			
 			defaultCadGen.add(allCad,foot,dh.getListener())
-			CSG testPiece = new Cube(40,dh.getR(),40).toCSG().toYMin()
-			defaultCadGen.add(allCad,testPiece,dh.getListener())
+			//CSG testPiece = new Cube(40,dh.getR(),40).toCSG().toYMin()
+			//defaultCadGen.add(allCad,testPiece,dh.getListener())
+
+			
+			CSG otherBit = new Cube(40,dh.getR(),thickness.getMM()).toCSG().toYMin().toZMin()
+			
+			defaultCadGen.add(allCad,otherBit,dh.getListener())
 		}
 		return allCad;
 	}
