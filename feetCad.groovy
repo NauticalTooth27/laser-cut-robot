@@ -11,7 +11,7 @@ class Feet implements ICadGenerator, IParameterChanged{
 	//First we load teh default cad generator script 
 	ICadGenerator defaultCadGen=(ICadGenerator) ScriptingEngine
 	                    .gitScriptRun(
-                                "https://github.com/NauticalTooth27/laser-cut-robot.git", // git location of the library
+                                "https://github.com/CounterfeitLlama/laser-cut-robot.git", // git location of the library
 	                              "laserCutCad.groovy" , // file to load
 	                              null
                         )
@@ -34,37 +34,44 @@ class Feet implements ICadGenerator, IParameterChanged{
 	private TransformNR offset =BowlerStudio3dEngine.getOffsetforvisualization().inverse();
 	ArrayList<CSG> headParts =null
 	@Override 
-	public ArrayList<CSG> generateCad(DHParameterKinematics d, int linkIndex) 
-	{
+	public ArrayList<CSG> generateCad(DHParameterKinematics d, int linkIndex) {
 		ArrayList<CSG> allCad=defaultCadGen.generateCad(d,linkIndex);
 		ArrayList<DHLink> dhLinks=d.getChain().getLinks();
 		DHLink dh = dhLinks.get(linkIndex)
-
+		
 		LinkConfiguration conf = d.getLinkConfiguration(linkIndex);
 
-		CSG servoReference=   Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
-		.transformed(new Transform().rotZ(90))
-
-		double servoTop = servoReference.getMaxZ()
-		CSG horn = Vitamins.get(conf.getShaftType(),conf.getShaftSize()).hull()
-		
 		HashMap<String, Object> shaftmap = Vitamins.getConfiguration(conf.getShaftType(),conf.getShaftSize())
 		double hornOffset = 	shaftmap.get("hornThickness")	
+		
+		// creating the servo
+		CSG servoReference=   Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
+		.transformed(new Transform().rotZ(90))
+		
+		double servoTop = servoReference.getMaxZ()
+
+		/*if(linkIndex==0){
+			//defaultCadGen.add(allCad,servoReference.clone(),d.getRootListener())
+			defaultCadGen.add(allCad,servoReference,dh.getListener())
+		}else{
+			if(linkIndex<dhLinks.size()-1)
+				defaultCadGen.add(allCad,servoReference,dh.getListener())
+			else{
+				// load the end of limb
+			}
+			
+		}*/
 		
 		//If you want you can add things here
 		//allCad.add(myCSG);
 		if(linkIndex ==dhLinks.size()-1){
 			println "Found foot limb" 
-			CSG foot =new Sphere(20).toCSG() // a one line Cylinder
-			
-			defaultCadGen.add(allCad,foot,dh.getListener())
-			//CSG testPiece = new Cube(40,dh.getR(),40).toCSG().toYMin()
-			//defaultCadGen.add(allCad,testPiece,dh.getListener())
+			CSG foot =new Cube(10,10,thickness.getMM()).toCSG() // a one line Cylinder
+			CSG top = new Cube(45, dh.getR(), 10).toCSG().toYMin()
+			top = defaultCadGen.moveDHValues(top,dh)
 
-			
-			CSG otherBit = new Cube(40,dh.getR(),thickness.getMM()).toCSG().toYMin().toZMin()
-			
-			defaultCadGen.add(allCad,otherBit,dh.getListener())
+			defaultCadGen.add(allCad,top,dh.getListener())
+			defaultCadGen.add(allCad,foot,dh.getListener())
 		}
 		return allCad;
 	}
