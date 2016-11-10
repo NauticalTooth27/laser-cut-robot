@@ -49,24 +49,14 @@ class Feet implements ICadGenerator, IParameterChanged{
 		.transformed(new Transform().rotZ(90))
 		
 		double servoTop = servoReference.getMaxZ()
-
-		/*if(linkIndex==0){
-			//defaultCadGen.add(allCad,servoReference.clone(),d.getRootListener())
-			defaultCadGen.add(allCad,servoReference,dh.getListener())
-		}else{
-			if(linkIndex<dhLinks.size()-1)
-				defaultCadGen.add(allCad,servoReference,dh.getListener())
-			else{
-				// load the end of limb
-			}
-			
-		}*/
 		
 		//If you want you can add things here
 		//allCad.add(myCSG);
+		
+		
 		if(linkIndex ==dhLinks.size()-1){
 			println "Found foot limb" 
-			CSG foot =new Sphere(40,40,10).toCSG() // a one line Sphere
+			CSG foot =new Sphere(25,25,10).toCSG() // a one line Sphere
 			CSG top = new Cube(45, dh.getR(), 10).toCSG().toYMin()
 						
 			top = defaultCadGen.moveDHValues(top,dh)
@@ -74,11 +64,14 @@ class Feet implements ICadGenerator, IParameterChanged{
 			defaultCadGen.add(allCad,foot,dh.getListener())
 			defaultCadGen.add(allCad,top,dh.getListener())
 		}
+		else{
 			CSG top = new Cube(45, dh.getR(), 10).toCSG().toYMin()
 			
 			top = defaultCadGen.moveDHValues(top,dh)
 
 			defaultCadGen.add(allCad,top,dh.getListener())
+		}
+		
 		return allCad;
 	}
 	@Override 
@@ -102,4 +95,4 @@ class Feet implements ICadGenerator, IParameterChanged{
 	}
 };
 
-//return new Feet()//Your code here
+return new Feet()//Your code here
