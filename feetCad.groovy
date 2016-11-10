@@ -63,7 +63,7 @@ class Feet implements ICadGenerator, IParameterChanged{
 
 			//leg = leg.difference(horn.hull())
 		}
-			CSG leg = new Cube(45, dh.getR(), 10).toCSG().toYMin().difference(defaultCadGen.moveDHValues(horn.hull(),dh)).difference(horn.hull())
+			CSG leg = new Cube(45, dh.getR(), 10).toCSG().toYMin().difference(defaultCadGen.moveDHValues(horn.movex(-dh.getR()).hull(),dh))
 						
 			leg = defaultCadGen.moveDHValues(leg,dh)
 			
