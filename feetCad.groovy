@@ -55,6 +55,11 @@ class Feet implements ICadGenerator, IParameterChanged{
 		//If you want you can add things here
 		//allCad.add(myCSG);
 		
+		CSG horncutout = horn
+		for (int i = 1; i< 4; i++)
+		{
+		 horncutout = horncutout.union(horn.movez(hornOffset * i))
+		}
 		
 		if(linkIndex ==dhLinks.size()-1){
 			println "Found foot limb" 
