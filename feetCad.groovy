@@ -45,7 +45,7 @@ class Feet implements ICadGenerator, IParameterChanged{
 		double hornOffset = 	shaftmap.get("hornThickness")	
 		
 		// creating the servo
-		CSG servoReference=   Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
+		CSG servoReference = Vitamins.get(conf.getElectroMechanicalType(),conf.getElectroMechanicalSize())
 		.transformed(new Transform().rotZ(90))
 		
 		double servoTop = servoReference.getMaxZ()
@@ -61,19 +61,33 @@ class Feet implements ICadGenerator, IParameterChanged{
 		 horncutout = horncutout.union(horn.movez(hornOffset * i))
 		}
 		
+		
+		
+		CSG leg = new Cube(45, dh.getR(), 45).toCSG().toYMin()
+
+		leg = defaultCadGen.moveDHValues(leg,dh)
+		
+		for(int i = 0; i < 4; i++)
+		{
+			leg = leg.difference(defaultCadGen.moveDHValues(horncutout,dh)) //differencing horn
+			leg = leg.difference(defaultCadGen.moveDHValues(horncutout.movex(dh.getR()),dh)) //differencing horn
+		}
+			
+			//.difference(defaultCadGen.moveDHValues(servoReference.hull(),dh))
+						
+			//leg = defaultCadGen.moveDHValues(leg,dh)
+			
 		if(linkIndex ==dhLinks.size()-1){
 			println "Found foot limb" 
-			CSG foot =new Sphere(25,25,10).toCSG() // a one line Sphere
-			defaultCadGen.add(allCad,foot,dh.getListener())
+			leg = leg.union(new Sphere(25,25,10).toCSG()) // a one line Sphere
+			//defaultCadGen.add(allCad,foot,dh.getListener())
 
 			//leg = leg.difference(horn.hull())
 		}
-			CSG leg = new Cube(45, dh.getR(), 10).toCSG().toYMin().difference(defaultCadGen.moveDHValues(horn.movex(-dh.getR()).hull(),dh))
-						
-			leg = defaultCadGen.moveDHValues(leg,dh)
-			
-			defaultCadGen.add(allCad,leg,dh.getListener())
-		
+
+		defaultCadGen.add(allCad,leg,dh.getListener())
+
+		leg.setManufactuing({ CSG arg0 -> return arg0.toZMin() })
 		
 		return allCad;
 	}
